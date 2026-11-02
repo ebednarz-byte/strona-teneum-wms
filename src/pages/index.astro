@@ -1,0 +1,110 @@
+---
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import { faqSchema } from '../lib/schema';
+import { getCollection } from 'astro:content';
+
+const procesy = (await getCollection('procesy')).sort((a, b) => a.data.order - b.data.order);
+const porownania = await getCollection('porownania');
+
+const faq = [
+  { q: 'Czym jest Teneum WMS?', a: 'Teneum WMS to polski system zarządzania magazynem firmy Sente, oferowany w subskrypcji. Steruje przyjęciem, składowaniem, kompletacją, pakowaniem, wysyłką, inwentaryzacją i zwrotami, a kierownik magazynu konfiguruje go i analizuje dane przez asystenta AI, bez programisty.' },
+  { q: 'Dla jakich firm jest Teneum WMS?', a: 'Dla firm e-commerce, fulfillmentu i 3PL oraz hurtowni i dystrybutorów B2B, które wysyłają od kilkuset do kilkudziesięciu tysięcy paczek dziennie i potrzebują systemu rosnącego razem z nimi.' },
+  { q: 'Ile kosztuje Teneum WMS?', a: 'Teneum WMS jest sprzedawany w abonamencie, w trzech pakietach: Light, Premium i Enterprise. Widełki i co wpływa na cenę opisujemy na stronie cennika.' },
+  { q: 'Czym Teneum WMS różni się od modułu magazynowego w ERP?', a: 'Moduł ERP ewidencjonuje stany. Teneum WMS prowadzi pracownika po magazynie w czasie rzeczywistym: wyznacza trasę, kolejność i miejsce, kontroluje każdy skan i optymalizuje pracę. Do kilkuset linii dziennie moduł ERP może wystarczyć; powyżej zwykle nie.' },
+];
+---
+<Base
+  title="Teneum WMS — system WMS, który konfigurujesz rozmową"
+  description="Teneum WMS: polski system zarządzania magazynem w subskrypcji, z asystentem AI. Dla e-commerce, fulfillmentu, 3PL oraz hurtu i dystrybucji. Sprawdź, czy pasuje do Twojego magazynu."
+  schema={[faqSchema(faq)]}
+  current="/"
+>
+  <section class="wrap hero">
+    <div class="hero-grid">
+      <div>
+        <p class="kicker">System WMS z asystentem AI, w subskrypcji</p>
+        <h1>Czy Teneum WMS pasuje do <em>Twojego</em> magazynu?</h1>
+        <p class="lead">Odpowiadamy wprost: dla kogo tak, dla kogo nie, ile to kosztuje i czym różni się od innych systemów WMS w Polsce.</p>
+        <div class="actions">
+          <a class="btn btn--accent" href="/produkt/dla-kogo/">Sprawdź, czy to dla Ciebie</a>
+          <a class="btn btn--ghost" href="/porownania/">Porównaj z innymi WMS</a>
+        </div>
+        <p class="proof"><span><b>Sente S.A.</b>, Wrocław</span><span><b>od 300</b> do <b>50 000</b> paczek dziennie</span><span><b>Bez programisty</b> przy zmianie procesu</span></p>
+      </div>
+      <div class="mock" aria-hidden="true">
+        <div class="mock-card">
+          <div class="mock-head"><b><i></i>Asystent AI · Teneum WMS</b><span>magazyn Wrocław · dziś</span></div>
+          <div class="chat">
+            <div class="msg msg--user">Ile linii zebrał dziś każdy pracownik i gdzie były braki?</div>
+            <div class="msg msg--ai">Dziś 1 842 linie, 6 pracowników. Braki w 3 lokacjach strefy B.
+              <div class="mini"><div><b>1 842</b>linii</div><div><b>307</b>na osobę</div><div><b>3</b>braki</div></div>
+              <div class="actions"><span>Zapisz jako dashboard</span><span>Pokaż lokacje</span></div>
+            </div>
+            <div class="msg msg--user">Zamówienia jednopozycyjne zbieraj od jutra zbiorczo, po 40.</div>
+            <div class="msg msg--ai">Rozumiem. Zmienię regułę fali dla zamówień 1-SKU na zbiórkę multi-order, 40 zamówień na wózek. Dotknie to ok. 62% zamówień. Wdrożyć?</div>
+          </div>
+          <div class="mock-input"><span>Napisz albo powiedz, co ma się zmienić…</span><i></i></div>
+        </div>
+        <div class="mock-badge"><b>Tekstem lub głosem</b>ten sam asystent na terminalu w magazynie</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="answer">
+      <p><strong>Teneum WMS</strong> to system zarządzania magazynem firmy Sente z Wrocławia, oferowany w subskrypcji. Kierownik magazynu konfiguruje procesy i analizuje dane, rozmawiając z asystentem AI, tekstem lub głosem, zamiast czekać na programistę. Sprawdza się od kilkuset do kilkudziesięciu tysięcy paczek dziennie.</p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Szybki test dopasowania</h2>
+        <p>Jeśli trzy z czterech zdań pasują do Twojego magazynu, Teneum WMS jest dla Ciebie. Jeśli żadne, oszczędzimy sobie nawzajem czas.</p>
+      </div>
+      <div class="bento">
+        <div class="b-4 dark"><strong>300+</strong><span>paczek lub linii dziennie w sezonie</span></div>
+        <div class="b-4"><strong>2 000+</strong><span>aktywnych SKU</span></div>
+        <div class="b-4"><strong>1–20</strong><span>magazynów lub stref, w tym obcych (3PL)</span></div>
+        <div class="b-12 sky"><h3>Masz już ERP, ale nie prowadzi pracownika po regałach</h3><p>Moduł ERP ewidencjonuje stany. Teneum prowadzi zbiórkę w czasie rzeczywistym: trasa, kolejność, skan, kontrola. Jeśli to zdanie pasuje, pozostałe trzy zwykle też.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--blue">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Jak Teneum prowadzi każdy proces w magazynie</h2>
+        <p>Każdy proces opisujemy tak samo: jak wygląda bez WMS, jak w Teneum i jakie liczby dają wdrożenia u klientów.</p>
+      </div>
+      <div class="cards">
+        {procesy.map((p) => (
+          <a href={`/produkt/procesy/${p.id}/`}>
+            <h3>{p.data.title}</h3>
+            <p>{p.data.answer}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Teneum WMS obok innych systemów</h2>
+        <p>Porównujemy według tych samych kryteriów i piszemy wprost, kiedy konkurent będzie lepszym wyborem.</p>
+      </div>
+      <div class="cards">
+        {porownania.map((c) => (
+          <a href={`/porownania/${c.id}/`}>
+            <h3>Teneum WMS vs {c.data.competitor}</h3>
+            <p>{c.data.verdict}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Faq items={faq} />
+</Base>

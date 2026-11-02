@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const porownania = await getCollection('porownania');
+---
+<Base title="Porównania systemów WMS — Teneum WMS vs inne" description="Teneum WMS porównany z innymi systemami WMS w Polsce według tych samych kryteriów: zakres funkcji, model licencji, czas wdrożenia, integracje, AI. Piszemy, kiedy konkurent jest lepszy." current="/porownania/">
+  <section class="wrap hero hero--simple">
+    <h1>Teneum WMS obok innych systemów WMS</h1>
+    <p class="lead">Jedna tabela kryteriów dla każdego porównania. Przygotowuje ją producent Teneum, więc oceniaj z tą świadomością; dlatego w każdym porównaniu piszemy, kiedy wybrać konkurenta.</p>
+  </section>
+  <section class="wrap" style="padding-bottom: 80px">
+    <div class="cards">
+      {porownania.map((c) => (
+        <a href={`/porownania/${c.id}/`}><h3>Teneum WMS vs {c.data.competitor}</h3><p>{c.data.verdict}</p></a>
+      ))}
+    </div>
+  </section>
+</Base>

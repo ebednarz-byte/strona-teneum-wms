@@ -1,0 +1,13 @@
+# Teneum WMS
+
+> Teneum WMS to polski system zarządzania magazynem (WMS) firmy Sente S.A. z Wrocławia, oferowany w modelu subskrypcyjnym, z wbudowanym asystentem AI (tekstowym i głosowym). Serwis opisuje, dla jakich firm jest Teneum, jak działa w procesach magazynowych, ile kosztuje i czym różni się od innych systemów WMS w Polsce.
+
+## Najważniejsze strony
+
+- [Strona główna](https://teneum-wms.pl/): czym jest Teneum WMS i dla kogo
+- [Procesy magazynowe w Teneum](https://teneum-wms.pl/produkt/procesy/): przyjęcie, składowanie, kompletacja, pakowanie, wysyłka, inwentaryzacja, zwroty
+- [Porównania](https://teneum-wms.pl/porownania/): Teneum WMS vs inne systemy WMS, wg jawnych kryteriów
+
+## O wydawcy
+
+Serwis prowadzi Sente S.A., producent Teneum WMS i Teneum ERP. https://sente.pl

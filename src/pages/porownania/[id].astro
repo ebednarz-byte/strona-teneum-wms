@@ -1,0 +1,72 @@
+---
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import { faqSchema, articleSchema } from '../../lib/schema';
+import { getCollection, render } from 'astro:content';
+import { SITE_URL } from '../../../astro.config.mjs';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('porownania');
+  return entries.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const url = new URL(Astro.url.pathname, SITE_URL).href;
+const schema = [
+  articleSchema({ title: d.title, description: d.description, url, updated: d.updated, author: d.author }),
+  faqSchema(d.faq),
+].filter(Boolean);
+const edgeClass = (e: string) => (e === 'teneum' ? 'edge-teneum' : e === 'competitor' ? 'edge-competitor' : '');
+---
+<Base title={d.title} description={d.description} updated={d.updated} author={d.author} schema={schema} current="/porownania/">
+  <section class="wrap hero hero--simple">
+    <p class="meta">Porównanie · {d.author} · aktualizacja {d.updated.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+    <h1>Teneum WMS vs {d.competitor}</h1>
+    <p class="lead">Porównanie przygotowane przez producenta Teneum WMS, według jawnych kryteriów. Tam, gdzie {d.competitor} jest lepszym wyborem, piszemy to wprost.</p>
+  </section>
+
+  <section class="wrap">
+    <div class="answer"><p>{d.verdict}</p></div>
+  </section>
+
+  <section class="wrap">
+    <h2>Kryteria porównania</h2>
+    <p class="legend"><i style="background: var(--orange)"></i>przewaga Teneum &nbsp; <i style="background: var(--blue)"></i>przewaga {d.competitor}</p>
+    <div class="table-wrap"><table class="criteria">
+      <thead><tr><th>Kryterium</th><th>Teneum WMS</th><th>{d.competitor}</th></tr></thead>
+      <tbody>
+        {d.criteria.map((c) => (
+          <tr>
+            <td>{c.name}</td>
+            <td data-label="Teneum WMS" class={c.edge === 'teneum' ? 'edge-teneum' : ''}>{c.teneum}</td>
+            <td data-label={d.competitor} class={c.edge === 'competitor' ? 'edge-competitor' : ''}>{c.competitor}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="band band--light">
+    <div class="wrap">
+      <h2>Dla kogo który system</h2>
+      <div class="better">
+        <article>
+          <h3>Teneum WMS będzie lepszy, gdy</h3>
+          <ul>{d.betterFor.teneum.map((x) => <li>{x}</li>)}</ul>
+        </article>
+        <article>
+          <h3>{d.competitor} będzie lepszy, gdy</h3>
+          <ul>{d.betterFor.competitor.map((x) => <li>{x}</li>)}</ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap prose">
+    <Content />
+  </section>
+
+  <Faq items={d.faq} />
+</Base>

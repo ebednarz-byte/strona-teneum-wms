@@ -1,0 +1,99 @@
+---
+import '../styles/global.css';
+import { SITE_URL } from '../../astro.config.mjs';
+
+interface Props {
+  title: string;
+  description: string;
+  updated?: Date;
+  author?: string;
+  /** dodatkowe obiekty JSON-LD (FAQPage, Article itd.) */
+  schema?: object[];
+  current?: string;
+}
+
+const { title, description, updated, author, schema = [], current } = Astro.props;
+const canonical = new URL(Astro.url.pathname, SITE_URL).href;
+const fullTitle = title.includes('Teneum') ? title : `${title} · Teneum WMS`;
+
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Sente S.A.',
+  url: 'https://sente.pl',
+  brand: { '@type': 'Brand', name: 'Teneum WMS' },
+  address: { '@type': 'PostalAddress', addressLocality: 'Wrocław', addressCountry: 'PL' },
+};
+
+const product = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Teneum WMS',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  description: 'System zarządzania magazynem (WMS) w modelu subskrypcyjnym, z asystentem AI, dla e-commerce, fulfillmentu, 3PL oraz handlu i dystrybucji B2B.',
+  publisher: { '@type': 'Organization', name: 'Sente S.A.', url: 'https://sente.pl' },
+  url: SITE_URL,
+};
+
+const nav = [
+  { href: '/produkt/procesy/', label: 'Jak działa' },
+  { href: '/porownania/', label: 'Porównania' },
+  { href: '/cennik/', label: 'Cennik' },
+  { href: '/case-studies/', label: 'Wdrożenia' },
+  { href: '/demo/', label: 'Umów demo', cta: true },
+];
+---
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pl_PL" />
+    {updated && <meta property="article:modified_time" content={updated.toISOString()} />}
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <script type="application/ld+json" set:html={JSON.stringify(organization)} />
+    <script type="application/ld+json" set:html={JSON.stringify(product)} />
+    {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  </head>
+  <body>
+    <div class="topbar">
+      <header class="wrap top">
+        <a class="brand" href="/"><img src="/teneum.svg" alt="Teneum" width="94" height="30" /><span>WMS</span></a>
+        <nav class="nav" aria-label="Główna">
+          {nav.map((n) => <a href={n.href} class={n.cta ? 'nav-cta' : undefined} aria-current={current === n.href ? 'page' : undefined}>{n.label}</a>)}
+        </nav>
+      </header>
+    </div>
+
+    <main>
+      <slot />
+    </main>
+
+    <section class="cta">
+      <div class="wrap">
+        <div class="box">
+          <h2>Zobacz Teneum WMS na danych z Twojego magazynu</h2>
+          <p>Godzinne demo: pokazujemy proces, który najbardziej Cię boli, i mówimy wprost, czy Teneum do niego pasuje.</p>
+          <a class="btn btn--accent" href="/demo/">Umów demo</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="wrap footer">
+      <p>Serwis prowadzi <a href="https://sente.pl">Sente S.A.</a>, producent Teneum WMS i Teneum ERP. Główna strona produktu: <a href="https://teneum.pl">teneum.pl</a>.</p>
+      {author && updated && <p>Autor: {author}. Ostatnia aktualizacja: {updated.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}.</p>}
+      <p>© {new Date().getFullYear()} Sente S.A., Wrocław</p>
+    </footer>
+  </body>
+</html>

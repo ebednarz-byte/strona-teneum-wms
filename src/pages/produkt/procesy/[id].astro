@@ -1,0 +1,61 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Faq from '../../../components/Faq.astro';
+import { faqSchema, articleSchema } from '../../../lib/schema';
+import { getCollection, render } from 'astro:content';
+import { SITE_URL } from '../../../../astro.config.mjs';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('procesy');
+  return entries.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const url = new URL(Astro.url.pathname, SITE_URL).href;
+const schema = [
+  articleSchema({ title: d.title, description: d.description, url, updated: d.updated, author: d.author }),
+  faqSchema(d.faq),
+].filter(Boolean);
+---
+<Base title={d.title} description={d.description} updated={d.updated} author={d.author} schema={schema} current="/produkt/procesy/">
+  <section class="wrap hero hero--simple">
+    <p class="meta">Jak działa Teneum WMS · {d.author} · aktualizacja {d.updated.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+    <h1>{d.question}</h1>
+  </section>
+
+  <section class="wrap">
+    <div class="answer"><p>{d.answer}</p></div>
+  </section>
+
+  {(d.before || d.after) && (
+    <section class="wrap">
+      <div class="beforeafter">
+        {d.before && <article class="before"><h3>Bez WMS</h3><p>{d.before}</p></article>}
+        {d.after && <article class="after"><h3>W Teneum WMS</h3><p>{d.after}</p></article>}
+      </div>
+    </section>
+  )}
+
+  {d.metrics.length > 0 && (
+    <section class="wrap">
+      <h2>Liczby z wdrożeń</h2>
+      <div class="metrics">
+        {d.metrics.map((m) => (
+          <div>
+            <strong>{m.value}</strong>
+            <span>{m.label}</span>
+            {m.note && <small>{m.note}</small>}
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="wrap prose">
+    <Content />
+  </section>
+
+  <Faq items={d.faq} />
+</Base>

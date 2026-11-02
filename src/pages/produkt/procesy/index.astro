@@ -1,0 +1,18 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const procesy = (await getCollection('procesy')).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title="Jak działa Teneum WMS — procesy magazynowe" description="Przyjęcie, składowanie, kompletacja, pakowanie, wysyłka, inwentaryzacja i zwroty w Teneum WMS: jak wygląda każdy proces bez WMS i z Teneum, z liczbami z wdrożeń." current="/produkt/procesy/">
+  <section class="wrap hero hero--simple">
+    <h1>Jak Teneum WMS prowadzi pracę w magazynie</h1>
+    <p class="lead">Siedem procesów, od przyjęcia do zwrotu. Każdy opisany tak samo: bez WMS, w Teneum, liczby.</p>
+  </section>
+  <section class="wrap" style="padding-bottom: 80px">
+    <div class="cards">
+      {procesy.map((p) => (
+        <a href={`/produkt/procesy/${p.id}/`}><h3>{p.data.title}</h3><p>{p.data.answer}</p></a>
+      ))}
+    </div>
+  </section>
+</Base>
